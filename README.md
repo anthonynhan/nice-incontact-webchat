@@ -4,7 +4,7 @@ This is a functioning service desk integration between Watson Assistant and NICE
 
 **Important:**  This is a reference implementation that provides an example of a fully functional integration. Make any necessary changes and perform robust testing before deploying this integration in production.
 
-This reference implementation supports the core features of a NICE inContact integration. If you want to customize or extend it to add more features, follow the procedure described in the [README](../../../README.md) for this repository.
+This reference implementation supports the core features of a NICE inContact integration. 
 
 You can refer to these NICE inContact docs and resources for more information about using the NICE inContact Patron API:
 
@@ -21,8 +21,6 @@ The client-side component manages the communication between the user and the age
 The communication uses the Patron API, which can be found at [Patron APIs](https://developer.niceincontact.com/API/PatronAPI).
 
 ## Setting up
-
-1. If you haven't done so already, follow the setup steps in the root-level [README](../../../README.md) to make sure you can run an instance of [ExampleServiceDesk](../../../src/example/webChat/README.md).
 
 1. If you haven't done so already, [set up chat](https://help.nice-incontact.com/content/acd/chat/setupchat.htm?tocpath=ACD%7CACD%7CChat%7C_____1) using your InContact admin account.
 
