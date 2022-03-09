@@ -12,16 +12,18 @@
  *
  */
 
-import { ErrorType } from '../../../../common/types/errors';
-import { MessageRequest, MessageResponse } from '../../../../common/types/message';
+import { ErrorType } from './common/types/errors';
+import { MessageRequest, MessageResponse } from './common/types/message';
 import {
   ServiceDesk,
   ServiceDeskFactoryParameters,
   ServiceDeskStateFromWAC,
-} from '../../../../common/types/serviceDesk';
-import { AgentProfile, ServiceDeskCallback } from '../../../../common/types/serviceDeskCallback';
-import { stringToMessageResponseFormat } from '../../../../common/utils';
+} from './common/types/serviceDesk';
+import { AgentProfile, ServiceDeskCallback } from './common/types/serviceDeskCallback';
+import { stringToMessageResponseFormat } from './common/utils';
 import { InContactSession } from './inContactTypes';
+
+declare var SERVER_BASE_URL: string;
 
 class InContactServiceDesk implements ServiceDesk {
   callback: ServiceDeskCallback;
@@ -47,7 +49,7 @@ class InContactServiceDesk implements ServiceDesk {
   /**
    * The URL of the server that will make requests to Patron API
    */
-  private SERVER_BASE_URL: string = process.env.SERVER_BASE_URL || 'http://localhost:3000';
+  // private SERVER_BASE_URL: string = process.env.SERVER_BASE_URL || 'http://localhost:3000';
 
   constructor(parameters: ServiceDeskFactoryParameters) {
     this.callback = parameters.callback;
@@ -60,7 +62,7 @@ class InContactServiceDesk implements ServiceDesk {
       this.poller = undefined;
     }
 
-    const request = await fetch(`${this.SERVER_BASE_URL}/incontact/end`, {
+    const request = await fetch(`${SERVER_BASE_URL}/incontact/end`, {
       method: 'POST',
       headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify(this.session),
@@ -70,7 +72,7 @@ class InContactServiceDesk implements ServiceDesk {
   }
 
   async sendMessageToAgent(message: MessageRequest, messageID: string): Promise<void> {
-    const request = await fetch(`${this.SERVER_BASE_URL}/incontact/post`, {
+    const request = await fetch(`${SERVER_BASE_URL}/incontact/post`, {
       method: 'POST',
       headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...this.session, message: message.input.text, label: 'User' }),
@@ -80,7 +82,7 @@ class InContactServiceDesk implements ServiceDesk {
   }
 
   async startChat(connectMessage: MessageResponse): Promise<void> {
-    const request = await fetch(`${this.SERVER_BASE_URL}/incontact/start`, {
+    const request = await fetch(`${SERVER_BASE_URL}/incontact/start`, {
       method: 'POST',
       headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify({}),
@@ -92,7 +94,7 @@ class InContactServiceDesk implements ServiceDesk {
 
     // The before unload event is fired when the window, the document and its resources are about to be unloaded.
     window.addEventListener('unload', (event) => {
-      navigator.sendBeacon(`${this.SERVER_BASE_URL}/incontact/end`, JSON.stringify(this.session)); // https://golb.hplar.ch/2018/09/beacon-api.html
+      navigator.sendBeacon(`${SERVER_BASE_URL}/incontact/end`, JSON.stringify(this.session)); // https://golb.hplar.ch/2018/09/beacon-api.html
     });
 
     await this.startPolling();
@@ -110,7 +112,7 @@ class InContactServiceDesk implements ServiceDesk {
     do {
       try {
         // eslint-disable-next-line no-await-in-loop
-        const request = await fetch(`${this.SERVER_BASE_URL}/incontact/get`, {
+        const request = await fetch(`${SERVER_BASE_URL}/incontact/get`, {
           method: 'POST',
           headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
           body: JSON.stringify(this.session),
@@ -126,7 +128,7 @@ class InContactServiceDesk implements ServiceDesk {
             case 'Waiting':
               try {
                 // eslint-disable-next-line no-await-in-loop
-                const request = await fetch(`${this.SERVER_BASE_URL}/incontact/queue`, {
+                const request = await fetch(`${SERVER_BASE_URL}/incontact/queue`, {
                   method: 'POST',
                   headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
                   body: JSON.stringify(this.session),
