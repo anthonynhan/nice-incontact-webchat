@@ -59,7 +59,7 @@ The communication uses the Patron API, which can be found at [Patron APIs](https
         - `Script`: Select previously created script
         - Click `Create Point of Contact`
 
-1. In the `src/incontact/webChat/server` subdirectory, rename or copy `.env-sample` to `.env`.
+1. In the `/server` subdirectory, rename or copy `.env-sample` to `.env`.
 
 1. In the `.env` file, update the values to the credentials from your NICE inContact account.
     - `INCONTACT_ACCESS_KEY_ID` and `INCONTACT_ACCESS_KEY_SECRET`: Follow [Getting Started](https://developer.niceincontact.com/Documentation/UserHubGettingStarted) to generate these keys.
@@ -70,17 +70,8 @@ The communication uses the Patron API, which can be found at [Patron APIs](https
     - `INCONTACT_POINTOFCONTACT`: The previously noted Point of Contact GUID.
     - `INCONTACT_SKILL`: The previously noted Skill ID.
 
-1. From the `src/incontact/webChat/server` directory, run `npm i`.
+1. From the `/server` directory, run `npm i`.
 
-1. From the `src/incontact/webChat/server` directory, run `npm start`. This starts a server on port `3000` of your local machine.
+1. From the `/server` directory, run `npm start`. This starts a server on port `3000` of your local machine.
 
-1. Go to the client directory in [src/incontact/webChat/client](./client). Rename or copy `.env-sample` to `.env`. In the `.env` file: 
-    - Add `SERVER_BASE_URL` variable to where your middleware is deployed. For instance, if you deployed locally, this value would be `http://localhost:3000`.
-
-1. From the InContact web chat client directory [src/incontact/webChat/client](./client) run:
-    - `npm i`
-    - `npm run dev`
-
-    If you've linked everything to your NICE inContact account correctly, you should be able to connect to an agent in NICE inContact.
-
-You should now be able to start a web chat session in a browser, and within the web chat, escalate to an agent to trigger the NICE inContact integration. For more information about how to start a web chat session using this integration, see the starter kit [README](../../../README.md#development).
+1. From the InContact web chat client directory, follow the instructions from the readme [\/client/README.md](./client/README.md).
