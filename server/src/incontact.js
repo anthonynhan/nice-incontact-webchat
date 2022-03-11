@@ -51,17 +51,17 @@ export function getToken(config) {
   });
 }
 
-export function getSession(token, config, pointOfContact, skill) {
+export function getSession(token, sessionConfig) {
   return new Promise((resolve) => {
     const options = {
       method: 'POST',
-      url: `${config.incontact.apiUri}/inContactAPI/services/${config.incontact.version}/contacts/chats`,
+      url: `${sessionConfig.apiUri}/inContactAPI/services/${sessionConfig.version}/contacts/chats`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        pointOfContact: pointOfContact,
-        parameters: ['P1', skill, 'P3', 'P4'],
+        pointOfContact: sessionConfig.pointOfContact,
+        parameters: ['P1', sessionConfig.skillId, 'P3', 'P4'],
         mediaType: 3,
       },
       responseType: 'json',

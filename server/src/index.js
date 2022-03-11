@@ -69,12 +69,16 @@ app.post('/incontact/start', async (req, res) => {
     return res.status(authorization.code).json({ error: authorization.error });
   }
   
-  const userDefined = req.body.context.skills["main skill"].user_defined;
-  const skillId = userDefined && "INCONTACT_SKILL" in userDefined ? userDefined.INCONTACT_SKILL : config.incontact.skillId;
-  const pointOfContact = userDefined && "INCONTACT_POINTOFCONTACT" in userDefined ? userDefined.INCONTACT_POINTOFCONTACT : config.incontact.pointOfContact;
   const token = R.path(['access_token'], authorization);
+  const userDefined = req.body.context.skills["main skill"].user_defined;
+  const sessionConfig = {
+    apiUri: config.incontact.apiUri,
+    version: config.incontact.version,
+    skillId: userDefined && "INCONTACT_SKILL" in userDefined ? userDefined.INCONTACT_SKILL : config.incontact.skillId,
+    pointOfContact: userDefined && "INCONTACT_POINTOFCONTACT" in userDefined ? userDefined.INCONTACT_POINTOFCONTACT : config.incontact.pointOfContact,
+  };
 
-  const session = await getSession(token, config, pointOfContact, skillId);
+  const session = await getSession(token, sessionConfig);
   if (session.error) {
     return res.status(session.code).json({ error: session.error });
   }
