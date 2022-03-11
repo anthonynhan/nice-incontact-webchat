@@ -15,6 +15,12 @@
 import axios from 'axios';
 import R from 'ramda';
 
+/**
+ * makeRequest
+ * 
+ * @param {} options 
+ * @returns Promise
+ */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 async function makeRequest(options) {
   return new Promise((resolve) => {
@@ -30,6 +36,13 @@ async function makeRequest(options) {
   });
 }
 
+
+/**
+ * getToken
+ * 
+ * @param {} config 
+ * @returns Promise
+ */
 export function getToken(config) {
   return new Promise((resolve) => {
     const options = {
@@ -51,7 +64,16 @@ export function getToken(config) {
   });
 }
 
+
+/**
+ * getSession
+ * 
+ * @param string token 
+ * @param {} sessionConfig 
+ * @returns Promise
+ */
 export function getSession(token, sessionConfig) {
+  console.log(`in getSession, skillId: ${sessionConfig.skillId}`);
   return new Promise((resolve) => {
     const options = {
       method: 'POST',
@@ -73,6 +95,15 @@ export function getSession(token, sessionConfig) {
   });
 }
 
+
+/**
+ * getMessage
+ * 
+ * @param string token 
+ * @param string chatSessionId 
+ * @param {} config 
+ * @returns Promise
+ */
 export function getMessage(token, chatSessionId, config) {
   return new Promise((resolve) => {
     const options = {
@@ -90,6 +121,17 @@ export function getMessage(token, chatSessionId, config) {
   });
 }
 
+
+/**
+ * postMessage
+ * 
+ * @param string token 
+ * @param string chatSessionId 
+ * @param string label 
+ * @param string message 
+ * @param {} config 
+ * @returns Promise
+ */
 export function postMessage(token, chatSessionId, label, message, config) {
   return new Promise((resolve) => {
     const options = {
@@ -108,6 +150,15 @@ export function postMessage(token, chatSessionId, label, message, config) {
   });
 }
 
+
+/**
+ * endSession
+ * 
+ * @param string token 
+ * @param string chatSessionId 
+ * @param {} config 
+ * @returns Promise
+ */
 export async function endSession(token, chatSessionId, config) {
   return new Promise((resolve) => {
     const options = {
@@ -125,11 +176,21 @@ export async function endSession(token, chatSessionId, config) {
   });
 }
 
-export async function getQueue(token, config) {
+
+/**
+ * getQueue
+ * 
+ * @param string token 
+ * @param number skillId 
+ * @param {} config 
+ * @returns Promise
+ */
+export async function getQueue(token, skillId, config) {
+  console.log(`in getQueue, skillId: ${skillId}`);
   return new Promise((resolve) => {
     const options = {
       method: 'GET',
-      url: `${config.incontact.apiUri}/inContactAPI/services/${config.incontact.version}/skills/${config.incontact.skill}/activity`,
+      url: `${config.incontact.apiUri}/inContactAPI/services/${config.incontact.version}/skills/${skillId ? skillId : config.incontact.skill}/activity`,
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -97,7 +97,11 @@ class InContactServiceDesk implements ServiceDesk {
       navigator.sendBeacon(`${SERVER_BASE_URL}/incontact/end`, JSON.stringify(this.session)); // https://golb.hplar.ch/2018/09/beacon-api.html
     });
 
-    await this.startPolling();
+    // determine the skill id
+    const userDefined = connectMessage.context.skills["main skill"].user_defined;
+    const skillId = userDefined && "INCONTACT_SKILL" in userDefined ? userDefined.INCONTACT_SKILL : undefined;
+
+    await this.startPolling(skillId);
     return Promise.resolve();
   }
 
@@ -105,7 +109,7 @@ class InContactServiceDesk implements ServiceDesk {
     this.state = state;
   }
 
-  private async startPolling(): Promise<void> {
+  private async startPolling(skillId: number|undefined): Promise<void> {
     const poller = { stop: false };
     this.poller = poller;
 
@@ -115,7 +119,7 @@ class InContactServiceDesk implements ServiceDesk {
         const request = await fetch(`${SERVER_BASE_URL}/incontact/get`, {
           method: 'POST',
           headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify(this.session),
+          body: JSON.stringify( this.session ),
         });
         // eslint-disable-next-line no-await-in-loop
         const output = await request.json();
@@ -131,7 +135,7 @@ class InContactServiceDesk implements ServiceDesk {
                 const request = await fetch(`${SERVER_BASE_URL}/incontact/queue`, {
                   method: 'POST',
                   headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-                  body: JSON.stringify(this.session),
+                  body: JSON.stringify({ session: this.session, skillId: skillId }),
                 });
                 // eslint-disable-next-line no-await-in-loop
                 const output = await request.json();

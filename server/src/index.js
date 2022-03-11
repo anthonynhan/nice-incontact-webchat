@@ -50,10 +50,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.post('/incontact/queue', async (req, res) => {
-  const token = R.path(['body', 'token'], req);
 
-  const output = await getQueue(token, config);
+/**
+ * Queue
+ */
+app.post('/incontact/queue', async (req, res) => {
+  const session = R.path(['body', 'session'], req);
+  const skillId = R.path(['body', 'skillId'], req);
+  //const token = R.path(['body', 'token'], req);
+  const token = session.token;
+  console.log(`calling getQueue, skillId: ${skillId}`);
+  const output = await getQueue(token, skillId, config);
   if (output.error) {
     return res.status(output.code).json({ error: output.error });
   }
@@ -62,6 +69,10 @@ app.post('/incontact/queue', async (req, res) => {
   return res.status(200).json({ queue });
 });
 
+
+/**
+ * Start
+ */
 app.post('/incontact/start', async (req, res) => {
   const authorization = await getToken(config);
   
@@ -80,6 +91,7 @@ app.post('/incontact/start', async (req, res) => {
 
   const session = await getSession(token, sessionConfig);
   if (session.error) {
+    console.log(`error getting session, error: ${JSON.stringify(session.error)}`)
     return res.status(session.code).json({ error: session.error });
   }
 
@@ -87,6 +99,10 @@ app.post('/incontact/start', async (req, res) => {
   return res.status(200).json(output);
 });
 
+
+/**
+ * Get
+ */
 app.post('/incontact/get', async (req, res) => {
   const chatSessionId = R.path(['body', 'chatSessionId'], req);
   const token = R.path(['body', 'token'], req);
@@ -161,6 +177,10 @@ app.post('/incontact/get', async (req, res) => {
   return res.status(200).json(output);
 });
 
+
+/**
+ * Post
+ */
 app.post('/incontact/post', async (req, res) => {
   const chatSessionId = R.path(['body', 'chatSessionId'], req);
   const message = R.path(['body', 'message'], req);
@@ -174,6 +194,10 @@ app.post('/incontact/post', async (req, res) => {
   return res.status(200).json({ post: true });
 });
 
+
+/**
+ * End
+ */
 app.post('/incontact/end', async (req, res) => {
   if (typeof req.body === 'string') {
     req.body = JSON.parse(req.body);
@@ -188,6 +212,7 @@ app.post('/incontact/end', async (req, res) => {
   }
   return res.status(200).json({ end: true });
 });
+
 
 http.createServer(app).listen(config.app.port, () => {
   console.log(`Worker ${process.pid} is listening to all incoming requests on ${config.app.port} port`);
