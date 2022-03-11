@@ -61,7 +61,7 @@ class InContactServiceDesk implements ServiceDesk {
       this.poller.stop = true;
       this.poller = undefined;
     }
-
+    
     const request = await fetch(`${SERVER_BASE_URL}/incontact/end`, {
       method: 'POST',
       headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
@@ -85,7 +85,7 @@ class InContactServiceDesk implements ServiceDesk {
     const request = await fetch(`${SERVER_BASE_URL}/incontact/start`, {
       method: 'POST',
       headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({}),
+      body: JSON.stringify(connectMessage)
     });
     const output = await request.json();
     if (output.chatSessionId) {

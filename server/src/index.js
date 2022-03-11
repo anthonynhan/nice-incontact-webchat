@@ -64,14 +64,17 @@ app.post('/incontact/queue', async (req, res) => {
 
 app.post('/incontact/start', async (req, res) => {
   const authorization = await getToken(config);
-
+  
   if (authorization.error) {
     return res.status(authorization.code).json({ error: authorization.error });
   }
-
+  
+  const userDefined = req.body.context.skills["main skill"].user_defined;
+  const skillId = userDefined && "INCONTACT_SKILL" in userDefined ? userDefined.INCONTACT_SKILL : config.incontact.skillId;
+  const pointOfContact = userDefined && "INCONTACT_POINTOFCONTACT" in userDefined ? userDefined.INCONTACT_POINTOFCONTACT : config.incontact.pointOfContact;
   const token = R.path(['access_token'], authorization);
 
-  const session = await getSession(token, config);
+  const session = await getSession(token, config, pointOfContact, skillId);
   if (session.error) {
     return res.status(session.code).json({ error: session.error });
   }

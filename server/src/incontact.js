@@ -51,7 +51,7 @@ export function getToken(config) {
   });
 }
 
-export function getSession(token, config) {
+export function getSession(token, config, pointOfContact, skill) {
   return new Promise((resolve) => {
     const options = {
       method: 'POST',
@@ -60,8 +60,8 @@ export function getSession(token, config) {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        pointOfContact: config.incontact.pointOfContact,
-        parameters: ['P1', config.incontact.skill, 'P3', 'P4'],
+        pointOfContact: pointOfContact,
+        parameters: ['P1', skill, 'P3', 'P4'],
         mediaType: 3,
       },
       responseType: 'json',
