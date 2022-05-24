@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "@babel/runtime": "^7.10.4",
-    "common": "file:../../../common"
+    "common": "file:./src/common"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.4",
@@ -37,7 +37,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
-    "preinstall": "cd ../src/common && npm install",
+    "preinstall": "cd ./src/common && npm install",
     "build": "webpack --config webpack.config.js",
     "dev": "webpack-dev-server --config webpack.dev.js",
     "test": "jest --clearCache && jest"
