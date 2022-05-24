@@ -139,10 +139,11 @@ class InContactServiceDesk implements ServiceDesk {
                 });
                 // eslint-disable-next-line no-await-in-loop
                 const output = await request.json();
-                if (output.queue !== undefined) {
+                //SJCC - SKM Commented out if for the queue count
+                //if (output.queue !== undefined) {
                   // Add one since queue value is 0 when there is no line
-                  this.callback.updateAgentAvailability({ position_in_queue: output.queue + 1 });
-                }
+                //  this.callback.updateAgentAvailability({ position_in_queue: output.queue + 1 });
+                //}
               } catch (error) {
                 // Do not stop polling when queue call fails
                 console.error('Unable to retrieve queue information.', error);
